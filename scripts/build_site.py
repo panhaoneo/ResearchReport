@@ -248,7 +248,7 @@ def render_pages(cfg, counts):
     ).hexdigest()[:8]
     x = cfg["ranking"]
     nav = "".join(
-        f'<a href="{p}.html">{{label}}</a>'
+        f'<a href="{p}.html">{label}</a>'
         for p, label in (("index", "首页"), ("browse", "浏览"), ("ranking", "新财富榜单"), ("about", "关于"))
     )
 
