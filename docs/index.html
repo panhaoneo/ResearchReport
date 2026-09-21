@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>研报数据库 · 每日更新</title>
+<meta name="description" content="每日自动更新的券商研报数据库，按新财富最佳分析师榜单标记">
+<link rel="stylesheet" href="assets/style.css?v=c4b2adf1">
+</head>
+<body data-page="index">
+<div class="topbar"><div class="inner">
+  <h1><a href="index.html">研报数据库</a></h1>
+  <div class="nav"><a href="index.html">{label}</a><a href="browse.html">{label}</a><a href="ranking.html">{label}</a><a href="about.html">{label}</a></div>
+  <div class="sub">每日自动更新（北京时间 12:30 / 20:30）· 数据来源：东方财富 / 新浪财经 · 榜单：新财富最佳分析师（第 23 届）· 站点构建于 <span id="gen-time">-</span></div>
+</div></div>
+<div class="container">
+  <div id="alert-host"></div>
+
+  <div class="searchbar">
+    <form id="search-form" style="display:flex;gap:10px;width:100%">
+      <input id="search-input" placeholder="搜索标题 / 机构 / 研究员 / 股票（回车）" autocomplete="off">
+      <button type="submit">搜索</button>
+    </form>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="section">
+    <h2>榜单精选<span class="hint">近 7 天 · 新财富上榜机构研报 · 按名次排序</span></h2>
+    <div id="featured"></div>
+  </div>
+  <div class="section">
+    <h2>今日最新<span class="hint">全量收录 · 时间倒序</span></h2>
+    <div id="recent"></div>
+  </div>
+  <footer>
+    数据库收录研报的版权归原研究机构所有，本站仅提供元数据索引与原文链接，供个人学习使用，不构成投资建议。<br>
+    数据来源：东方财富研报中心 · 新浪财经研报 · 新财富（榜单）　·　<a href="about.html">关于本站</a>
+  </footer>
+</div>
+<script src="assets/app.js?v=c4b2adf1"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+name: daily-research-reports
+
+on:
+  schedule:
+    - cron: "30 4 * * *"   # 北京 12:30
+    - cron: "30 12 * * *"  # 北京 20:30
+  push:
+    branches: [main]
+    paths:
+      - "data/**"
+      - "docs/**"
+      - "scripts/**"
+      - "config/**"
+      - ".github/workflows/daily.yml"
+      - "requirements.txt"
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "回填天数（0=增量）"
+        default: "0"
+      budget_mb:
+        description: "PDF 下载预算 MB"
+        default: "12"
+      no_download:
+        description: "跳过 PDF 下载（true/false）"
+        default: "false"
+
+concurrency:
+  group: research-report-daily
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: 安装依赖
+        run: pip install --quiet -r requirements.txt
+
+      - name: 抓取研报（增量 / 回填）
+        env:
+          TZ: Asia/Shanghai
+          IN_DAYS: ${{ github.event.inputs.days || '0' }}
+          IN_BUDGET: ${{ github.event.inputs.budget_mb || '12' }}
+          IN_NODL: ${{ github.event.inputs.no_download || 'false' }}
+        run: |
+          case "$IN_DAYS" in ''|*[!0-9]*) echo "days 必须为数字"; exit 2;; esac
+          case "$IN_BUDGET" in ''|*[!0-9.]*) echo "budget_mb 必须为数字"; exit 2;; esac
+          ARGS="--budget-mb $IN_BUDGET"
+          if [ "$IN_NODL" = "true" ]; then
+            ARGS="$ARGS --no-download"
+          fi
+          if [ "$IN_DAYS" != "0" ]; then
+            ARGS="$ARGS --mode backfill --days $IN_DAYS"
+          fi
+          echo "运行: python3 scripts/fetch_reports.py $ARGS"
+          python3 scripts/fetch_reports.py $ARGS
+
+      - name: 构建站点
+        run: python3 scripts/build_site.py
+
+      - name: 容量日志
+        run: |
+          du -sh docs/pdfs 2>/dev/null || true
+          git count-objects -vH | tail -4
+
+      - name: 提交并推送
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data docs
+          if git diff --cached --quiet; then echo "无变化，跳过提交"; exit 0; fi
+          git commit -m "data: reports $(date -u +%F-%H%M)"
+          for i in 1 2 3; do
+            git push && break
+            echo "push 失败，rebase 重试 $i"
+            git pull --rebase --autostash || true
+            sleep 5
+          done
+
+      - name: 上传 Pages 产物
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  deploy:
+    needs: update
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+      contents: read
+    steps:
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

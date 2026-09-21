@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>浏览 · 研报数据库</title>
+<meta name="description" content="按类型/时间/机构/行业/评级筛选研报">
+<link rel="stylesheet" href="assets/style.css?v=c4b2adf1">
+</head>
+<body data-page="browse">
+<div class="topbar"><div class="inner">
+  <h1><a href="index.html">研报数据库</a></h1>
+  <div class="nav"><a href="index.html">{label}</a><a href="browse.html">{label}</a><a href="ranking.html">{label}</a><a href="about.html">{label}</a></div>
+  <div class="sub">每日自动更新（北京时间 12:30 / 20:30）· 数据来源：东方财富 / 新浪财经 · 榜单：新财富最佳分析师（第 23 届）· 站点构建于 <span id="gen-time">-</span></div>
+</div></div>
+<div class="container">
+  <div id="alert-host"></div>
+
+  <div class="filterbar">
+    <div class="frow">
+      <label>类型</label>
+      <div class="chips" id="f-type">
+        <span class="chip" data-v="0">个股</span><span class="chip" data-v="1">行业</span>
+        <span class="chip" data-v="2">策略</span><span class="chip" data-v="3">宏观</span>
+      </div>
+      <label>时间</label>
+      <div class="chips" id="f-preset">
+        <span class="chip" data-v="today">今天</span><span class="chip" data-v="d7">近7天</span>
+        <span class="chip" data-v="d30">近30天</span><span class="chip" data-v="d90">近90天</span>
+        <span class="chip" data-v="all">全部</span>
+      </div>
+    </div>
+    <div class="frow">
+      <select id="f-org"><option value="">全部机构</option></select>
+      <select id="f-ind"><option value="">全部行业</option></select>
+      <select id="f-rating"><option value="">全部评级</option></select>
+      <label class="checkline"><input type="checkbox" id="f-rank">仅上榜机构</label>
+      <label class="checkline"><input type="checkbox" id="f-pdf">仅本地PDF</label>
+    </div>
+    <div class="frow">
+      <label>自选</label>
+      <input type="date" id="f-from"> <span style="color:#8a9199">~</span> <input type="date" id="f-to">
+      <input type="text" id="f-kw" class="kw" placeholder="关键词（标题/机构/研究员）" autocomplete="off">
+    </div>
+  </div>
+  <div class="toolbar">
+    <span id="result-count">-</span>
+    <span style="margin-left:auto">排序</span>
+    <select id="f-sort">
+      <option value="rank">榜单优先</option>
+      <option value="new">时间最新</option>
+      <option value="pages">页数最多</option>
+    </select>
+  </div>
+  <div id="results"></div>
+  <footer>
+    数据库收录研报的版权归原研究机构所有，本站仅提供元数据索引与原文链接，供个人学习使用，不构成投资建议。<br>
+    数据来源：东方财富研报中心 · 新浪财经研报 · 新财富（榜单）　·　<a href="about.html">关于本站</a>
+  </footer>
+</div>
+<script src="assets/app.js?v=c4b2adf1"></script>
+</body>
+</html>

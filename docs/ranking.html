@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新财富榜单 · 研报数据库</title>
+<meta name="description" content="新财富最佳分析师榜单与机构研报收录">
+<link rel="stylesheet" href="assets/style.css?v=c4b2adf1">
+</head>
+<body data-page="ranking">
+<div class="topbar"><div class="inner">
+  <h1><a href="index.html">研报数据库</a></h1>
+  <div class="nav"><a href="index.html">{label}</a><a href="browse.html">{label}</a><a href="ranking.html">{label}</a><a href="about.html">{label}</a></div>
+  <div class="sub">每日自动更新（北京时间 12:30 / 20:30）· 数据来源：东方财富 / 新浪财经 · 榜单：新财富最佳分析师（第 23 届）· 站点构建于 <span id="gen-time">-</span></div>
+</div></div>
+<div class="container">
+  <div id="alert-host"></div>
+
+  <div class="section">
+    <h2>第二十三届新财富最佳分析师<span class="hint">榜单展示与收录情况</span></h2>
+    <div id="rk-meta" style="font-size:13px;color:#8a9199"></div>
+    <p style="font-size:13px;color:#8a9199;margin-top:8px">
+      榜单为年度评选（结果发布于 xcf.cn，官方形式为图片，由人工转录进本仓库）。
+      点击机构名可查看该机构近期研报；统计为本站已收录范围内的篇数。
+      「本地PDF」为本站已保存全文的篇数。
+    </p>
+  </div>
+  <div class="section">
+    <h2>团队榜</h2>
+    <div class="teamlist" id="team-boards"></div>
+  </div>
+  <div class="section">
+    <h2>行业榜<span class="hint">每个行业前 5 名机构</span></h2>
+    <div class="rankboard" id="ind-boards"></div>
+  </div>
+  <footer>
+    数据库收录研报的版权归原研究机构所有，本站仅提供元数据索引与原文链接，供个人学习使用，不构成投资建议。<br>
+    数据来源：东方财富研报中心 · 新浪财经研报 · 新财富（榜单）　·　<a href="about.html">关于本站</a>
+  </footer>
+</div>
+<script src="assets/app.js?v=c4b2adf1"></script>
+</body>
+</html>

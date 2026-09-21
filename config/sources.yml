@@ -1,0 +1,19 @@
+em:
+  report_list: "https://reportapi.eastmoney.com/report/list"   # qType 0/1
+  report_jg: "https://reportapi.eastmoney.com/report/jg"       # qType 2/3/4
+  pdf: "https://pdf.dfcfw.com/pdf/H3_{info_code}_1.pdf"
+  referer: "https://data.eastmoney.com/"
+  detail:
+    q0: "https://data.eastmoney.com/report/stock.jshtml?infocode={info_code}"
+    q1: "https://data.eastmoney.com/report/industry.jshtml?infocode={info_code}"
+    q2: "https://data.eastmoney.com/report/strategyreport.jshtml?encodeUrl={encode_url}"
+    q3: "https://data.eastmoney.com/report/macresearch.jshtml?encodeUrl={encode_url}"
+
+sina:
+  list: "https://stock.finance.sina.com.cn/stock/go.php/vReport_List/kind/lastest/index.phtml?p={page}"
+  detail: "https://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/lastest/rptid/{rptid}/index.phtml"
+  encoding: gbk
+
+xcf:
+  site: "https://www.xcf.cn/zjfxs"
+  probe: "https://etfinfo.xcf.cn/voteImg/fxs/{edition}fxsResult/{edition}fxsImg1.png"

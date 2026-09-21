@@ -1,0 +1,22 @@
+fetch:
+  qtypes: [0, 1, 2, 3]            # 0个股 1行业 2策略 3宏观（4券商晨会默认关闭）
+  page_size: {list: 100, jg: 50}
+  max_pages_per_type: 20
+  min_interval_s: 1.2             # 东财请求最小间隔（全局限流）
+  incremental_lookback_days: 2    # 增量模式回看天数，防跨日漏抓
+  sina: {enable: true, pages: 2}
+
+pdf:
+  enable: true
+  daily_budget_mb: 12             # 每日下载预算（Pages 1GB 上限约束下的默认值）
+  tier0_reserve_mb: 8             # 预算中为 tier0（行业前5/团队前3）预留的额度
+  per_file_max_mb: 8
+  tier0_industry_rank_max: 5
+  tier0_team_rank_max: 3
+  retention_days: 90              # 目标保留期
+  min_keep_days: 30               # 容量超限时也不少于这个天数
+  total_cap_mb: 850               # 总容量红线（低于 Pages 1GB 硬上限）
+
+site:
+  latest_days: 3                  # 首页"今日最新"覆盖天数
+  max_records_per_view: 2000

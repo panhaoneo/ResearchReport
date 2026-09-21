@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>关于 · 研报数据库</title>
+<meta name="description" content="关于本站">
+<link rel="stylesheet" href="assets/style.css?v=c4b2adf1">
+</head>
+<body data-page="about">
+<div class="topbar"><div class="inner">
+  <h1><a href="index.html">研报数据库</a></h1>
+  <div class="nav"><a href="index.html">{label}</a><a href="browse.html">{label}</a><a href="ranking.html">{label}</a><a href="about.html">{label}</a></div>
+  <div class="sub">每日自动更新（北京时间 12:30 / 20:30）· 数据来源：东方财富 / 新浪财经 · 榜单：新财富最佳分析师（第 23 届）· 站点构建于 <span id="gen-time">-</span></div>
+</div></div>
+<div class="container">
+  <div id="alert-host"></div>
+
+  <div class="section">
+    <h2>关于本站</h2>
+    <table class="fields">
+      <tr><th>收录内容</th><td>券商研报元数据（个股 / 行业 / 策略 / 宏观四类），每日自动抓取</td></tr>
+      <tr><th>数据来源</th><td>东方财富研报中心（主）、新浪财经研报（补充）、新财富榜单（xcf.cn）</td></tr>
+      <tr><th>榜单版本</th><td><span id="ab-edition">-</span>（人工转录，<a href="ranking.html">查看榜单页</a>）</td></tr>
+      <tr><th>更新频率</th><td>每日两次（北京时间 12:30 / 20:30），由 GitHub Actions 自动执行</td></tr>
+      <tr><th>当前收录</th><td><span id="ab-total">-</span> 篇 · 站点构建于 <span id="ab-generated">-</span></td></tr>
+      <tr><th>本地PDF</th><td><span id="ab-pdf">-</span>（仅上榜机构研报，滚动保留，超期自动清理并保留外链）</td></tr>
+      <tr><th>榜单标记规则</th><td>机构进入所在行业前 5 名或总量团队前 3 名标记为最高优先级（金色标签）；上榜机构（前5/前10）标记为一般上榜（灰色标签）</td></tr>
+    </table>
+  </div>
+  <div class="section">
+    <h2>免责声明</h2>
+    <p style="font-size:13.5px;color:#55606b">
+      本站收录研报的全部版权归原研究机构及作者所有，本站仅作个人学习用途的元数据索引与链接聚合，
+      不存储、不传播未授权的付费内容；「本地PDF」为抓取时公开可访问的原文快照，将按保留策略定期清理。
+      站点内容不构成任何投资建议。
+    </p>
+  </div>
+  <footer>
+    数据库收录研报的版权归原研究机构所有，本站仅提供元数据索引与原文链接，供个人学习使用，不构成投资建议。<br>
+    数据来源：东方财富研报中心 · 新浪财经研报 · 新财富（榜单）　·　<a href="about.html">关于本站</a>
+  </footer>
+</div>
+<script src="assets/app.js?v=c4b2adf1"></script>
+</body>
+</html>

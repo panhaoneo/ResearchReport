@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+*.part
+
+# 忽略根目录下的参考资料 PDF，但放行站点内存储的研报 PDF
+*.pdf
+!docs/pdfs/*.pdf
+
+.DS_Store

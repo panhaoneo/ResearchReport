@@ -1,0 +1,150 @@
+/* 研报数据库 · 共享样式 */
+:root {
+  --bg: #f0f2f5;
+  --card: #fff;
+  --fg: #2d3436;
+  --muted: #8a9199;
+  --border: #eef2f7;
+  --accent: #1a1a2e;
+  --t0: #2980b9;   /* 个股 */
+  --t1: #16a085;   /* 行业 */
+  --t2: #8e44ad;   /* 策略 */
+  --t3: #e67e22;   /* 宏观 */
+  --gold: #b8860b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg); color: var(--fg); line-height: 1.65; padding: 0 16px 40px;
+}
+a { color: #2980b9; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 920px; margin: 0 auto; }
+
+/* 顶栏 */
+.topbar {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  color: #fff; padding: 26px 30px; border-radius: 0 0 14px 14px; margin: 0 -16px 20px;
+}
+.topbar .inner { max-width: 920px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px; }
+.topbar h1 { font-size: 22px; font-weight: 700; }
+.topbar h1 a { color: #fff; }
+.topbar h1 a:hover { text-decoration: none; opacity: .9; }
+.topbar .nav { margin-left: auto; display: flex; gap: 18px; font-size: 14px; }
+.topbar .nav a { color: #cfd8e3; }
+.topbar .nav a.active, .topbar .nav a:hover { color: #fff; }
+.topbar .sub { width: 100%; color: #9fb0c4; font-size: 12.5px; margin-top: 2px; }
+
+/* 提示条 */
+.alert {
+  background: #fff8e1; border: 1px solid #ffe082; color: #8d6e00;
+  border-radius: 10px; padding: 10px 16px; margin-bottom: 16px; font-size: 13.5px;
+}
+
+/* 统计卡 */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 18px; }
+.stat { background: var(--card); border-radius: 12px; padding: 14px 16px; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
+.stat .num { font-size: 22px; font-weight: 700; color: var(--accent); }
+.stat .lab { font-size: 12.5px; color: var(--muted); }
+
+/* 区块 */
+.section { background: var(--card); border-radius: 12px; padding: 18px 22px 22px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
+.section h2 { font-size: 17px; color: var(--accent); padding-bottom: 8px; border-bottom: 2px solid var(--border); margin-bottom: 14px; display: flex; align-items: baseline; gap: 10px; }
+.section h2 .hint { font-size: 12px; color: var(--muted); font-weight: 400; }
+
+/* 搜索框 */
+.searchbar { display: flex; gap: 10px; margin-bottom: 16px; }
+.searchbar input {
+  flex: 1; border: 1px solid #dfe6ec; border-radius: 10px; padding: 10px 14px;
+  font-size: 14px; outline: none; background: #fff;
+}
+.searchbar input:focus { border-color: #2980b9; }
+.searchbar button {
+  border: none; background: #2980b9; color: #fff; border-radius: 10px;
+  padding: 10px 20px; font-size: 14px; cursor: pointer;
+}
+.searchbar button:hover { background: #3498db; }
+
+/* 研报卡片 */
+.card { border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; background: #fff; transition: box-shadow .15s; }
+.card:hover { box-shadow: 0 4px 14px rgba(0,0,0,.08); }
+.card .row1 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+.card h3 { font-size: 15px; font-weight: 600; line-height: 1.45; }
+.card h3 a { color: #1a2634; }
+.card h3 a:hover { color: #2980b9; }
+.card .meta { font-size: 12.5px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 6px; }
+.card .links { margin-top: 8px; display: flex; gap: 14px; font-size: 12.5px; flex-wrap: wrap; }
+.card .links a.local { color: #b8860b; font-weight: 600; }
+
+.tag { display: inline-block; font-size: 11.5px; line-height: 19px; padding: 0 8px; border-radius: 9px; white-space: nowrap; }
+.type-0 { background: #e3f0fa; color: var(--t0); }
+.type-1 { background: #e2f5f0; color: var(--t1); }
+.type-2 { background: #f3e9fa; color: var(--t2); }
+.type-3 { background: #fdf0e3; color: var(--t3); }
+.tag-type { background: #f0f2f5; color: #66707a; }
+.badge-t0 { background: #b8860b; color: #fff; font-weight: 600; }
+.badge-t1 { background: #eef3f8; color: #4a6a85; }
+.badge-pdf { background: #fff4d6; color: #a07600; }
+.badge-rank { background: #f6e7c8; color: #8a6500; font-size: 11.5px; }
+
+/* 筛选栏 */
+.filterbar { background: var(--card); border-radius: 12px; padding: 14px 18px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
+.filterbar .frow { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px; }
+.filterbar .frow:last-child { margin-bottom: 0; }
+.filterbar label { font-size: 12.5px; color: var(--muted); }
+.filterbar select, .filterbar input[type="date"] {
+  border: 1px solid #dfe6ec; border-radius: 8px; padding: 6px 10px; font-size: 13px; background: #fff; color: var(--fg);
+}
+.filterbar .kw { flex: 1; min-width: 140px; border: 1px solid #dfe6ec; border-radius: 8px; padding: 6px 10px; font-size: 13px; }
+.filterbar .kw:focus { border-color: #2980b9; outline: none; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip {
+  border: 1px solid #dfe6ec; background: #fff; color: #55606b; border-radius: 999px;
+  font-size: 12.5px; padding: 4px 12px; cursor: pointer;
+}
+.chip.on { background: #1a1a2e; border-color: #1a1a2e; color: #fff; }
+.checkline { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #55606b; cursor: pointer; }
+
+/* 列表工具条 */
+.toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
+.toolbar select { border: 1px solid #dfe6ec; border-radius: 8px; padding: 5px 8px; font-size: 13px; }
+.more { display: block; width: 100%; border: 1px dashed #cfd8e3; background: #fff; color: #55606b; border-radius: 10px; padding: 10px; cursor: pointer; font-size: 13.5px; margin-top: 6px; }
+.more:hover { border-color: #2980b9; color: #2980b9; }
+.loading { text-align: center; color: var(--muted); font-size: 13px; padding: 22px; }
+.empty { text-align: center; color: var(--muted); font-size: 13.5px; padding: 40px 0; }
+
+/* 详情页 */
+.detail h1 { font-size: 19px; line-height: 1.5; margin-bottom: 10px; color: #1a2634; }
+.detail .fields { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 14px 0; }
+.detail .fields th, .detail .fields td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.detail .fields th { color: var(--muted); font-weight: 500; width: 92px; white-space: nowrap; }
+.btnrow { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0; }
+.btn { display: inline-block; background: #2980b9; color: #fff; border-radius: 9px; padding: 8px 18px; font-size: 13.5px; }
+.btn:hover { background: #3498db; text-decoration: none; }
+.btn.ghost { background: #fff; color: #2980b9; border: 1px solid #bcd8ec; }
+.pdfview { width: 100%; height: 78vh; border: 1px solid var(--border); border-radius: 10px; margin-top: 10px; }
+
+/* 榜单页 */
+.rankboard { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.indblock { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; }
+.indblock h3 { font-size: 14.5px; color: var(--accent); margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+.indrow { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 13px; flex-wrap: wrap; }
+.indrow .rk { width: 20px; height: 20px; border-radius: 50%; background: #f0f2f5; color: #66707a; font-size: 11.5px; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.indrow .rk.r1 { background: #b8860b; color: #fff; }
+.indrow .rk.r2 { background: #d4af37; color: #fff; }
+.indrow .rk.r3 { background: #e6cf8b; color: #6b5200; }
+.indrow .org { font-weight: 600; }
+.indrow .st { color: var(--muted); font-size: 12px; margin-left: auto; white-space: nowrap; }
+.teamlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+
+footer { text-align: center; color: var(--muted); font-size: 12px; padding: 26px 0 10px; line-height: 1.9; }
+footer a { color: var(--muted); text-decoration: underline; }
+
+@media (max-width: 640px) {
+  body { padding: 0 10px 30px; }
+  .topbar { padding: 18px 16px; }
+  .topbar .nav { gap: 12px; }
+  .section { padding: 14px 14px 16px; }
+  .card h3 { font-size: 14.5px; }
+  .pdfview { height: 62vh; }
+}
