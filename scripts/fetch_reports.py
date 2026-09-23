@@ -19,9 +19,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from bs4 import BeautifulSoup  # noqa: E402
 
 from common import (  # noqa: E402
-    PDFS_DIR, REPORTS_DIR, EmClient, build_ranking_index, fingerprint, infer_industry,
-    jsonl_path_for, load_all_records, load_cfg, load_jsonl, load_state, log, match_xcf,
-    month_of, normalize_org, now_bj, save_state, sanitize_filename, write_jsonl,
+    PDFS_DIR, REPORTS_DIR, EmClient, build_picks_index, build_ranking_index, fingerprint,
+    infer_industry, jsonl_path_for, load_all_records, load_cfg, load_jsonl, load_state, log,
+    match_picks, match_xcf, month_of, normalize_org, now_bj, save_state, sanitize_filename,
+    write_jsonl,
 )
 
 SINA_TYPE_MAP = {"公司": 0, "个股": 0, "行业": 1, "策略": 2, "投资策略": 2, "宏观": 3, "宏观经济": 3}
@@ -355,6 +356,7 @@ def download_pdfs(client, records, cfg, budget_mb, stats):
     alias, imap = cfg["alias"], cfg["industry_map"]
     ref = cfg["sources"]["em"]["referer"]
     ranking_index = build_ranking_index(cfg["ranking"], alias)
+    picks_index = build_picks_index(cfg.get("picks"), alias)
     today = now_bj().date()
 
     # 清理上次中断残留
@@ -379,8 +381,10 @@ def download_pdfs(client, records, cfg, budget_mb, stats):
             continue
         ind_xcf = infer_industry(rec.get("industry_em"), None, rec.get("title", ""), imap)
         x = match_xcf(normalize_org(rec.get("org"), alias), ind_xcf, ranking_index, t0i, t0t)
+        # 推荐分析师的研报视同最高优先级下载
+        eff_tier = 0 if match_picks(rec, picks_index, alias) else x["tier"]
         ts = datetime.strptime(rec["date"], "%Y-%m-%d").toordinal()
-        cands.append((x["tier"], x["best_rank"] or 99, -ts, rec.get("size_kb") or 99999, rec))
+        cands.append((eff_tier, x["best_rank"] or 99, -ts, rec.get("size_kb") or 99999, rec))
     cands.sort(key=lambda c: c[:4])
 
     used_mb = 0.0

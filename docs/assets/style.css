@@ -85,7 +85,19 @@ a:hover { text-decoration: underline; }
 .badge-t0 { background: #b8860b; color: #fff; font-weight: 600; }
 .badge-t1 { background: #eef3f8; color: #4a6a85; }
 .badge-pdf { background: #fff4d6; color: #a07600; }
+.badge-pick { background: #e7f4ee; color: #0c7a54; border: 1px solid #bfe3d2; font-weight: 600; }
 .badge-rank { background: #f6e7c8; color: #8a6500; font-size: 11.5px; }
+
+/* 推荐关注 */
+.pickgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 12px; }
+.pickcard { border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
+.pickcard .ph { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pickcard .nm { font-weight: 700; font-size: 15px; color: #1a2634; }
+.pickcard .og { color: var(--muted); font-size: 12.5px; }
+.pickcard .nt { color: #8a9199; font-size: 12.5px; margin-top: 6px; line-height: 1.6; }
+.pickcard .st { color: var(--muted); font-size: 12px; margin-top: 6px; }
+.pickcard .sm { margin-top: 8px; font-size: 12.5px; }
+.pickcard .sm a { display: block; margin-top: 3px; }
 
 /* 筛选栏 */
 .filterbar { background: var(--card); border-radius: 12px; padding: 14px 18px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,.05); }

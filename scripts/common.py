@@ -109,6 +109,7 @@ def load_cfg():
         "ranking": load_json(CONFIG_DIR / "xcf_ranking.json", {}),
         "alias": load_json(CONFIG_DIR / "org_alias.json", {}),
         "industry_map": load_json(CONFIG_DIR / "industry_map.json", {"name_map": {}, "title_keywords": []}),
+        "picks": load_json(CONFIG_DIR / "analyst_picks.json", {"picks": []}),
     }
 
 
@@ -215,6 +216,40 @@ def match_xcf(org_canon, industry_xcf, ranking_index, tier0_ind_max=5, tier0_tea
         "scope": scope,
         "tags": tags,
     }
+
+
+# ---------------------------------------------------------------- 分析师推荐名单
+
+
+def build_picks_index(picks_cfg, alias):
+    """（姓名, 机构规范名）→ 推荐条目；同名多领域自动归并。"""
+    idx = {}
+    for p in (picks_cfg or {}).get("picks") or []:
+        name = (p.get("name") or "").strip()
+        if not name:
+            continue
+        org = (p.get("org") or "").strip()
+        key = (name, normalize_org(org, alias))
+        e = idx.setdefault(key, {"name": name, "org": org, "fields": [], "note": p.get("note") or "", "team": bool(p.get("team"))})
+        field = (p.get("field") or "").strip()
+        if field and field not in e["fields"]:
+            e["fields"].append(field)
+        if p.get("note") and not e["note"]:
+            e["note"] = p["note"]
+    return idx
+
+
+def match_picks(rec, picks_index, alias):
+    """研报命中的推荐分析师列表；机构为空时仅按姓名匹配。"""
+    au = rec.get("researcher") or ""
+    if not au:
+        return []
+    org_canon = normalize_org(rec.get("org"), alias)
+    out = []
+    for (name, org_canon_p), e in picks_index.items():
+        if name in au and (not org_canon_p or org_canon == org_canon_p):
+            out.append({"name": name, "org": e["org"], "fields": e["fields"]})
+    return out
 
 
 # ---------------------------------------------------------------- 网络

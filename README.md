@@ -7,13 +7,21 @@
 ```
 config/     settings.yml(调参入口) sources.yml(端点) xcf_ranking.json(新财富榜单)
             org_alias.json(机构名归一化) industry_map.json(东财行业→新财富行业)
-data/       reports/YYYY-MM.jsonl(主存储，一月一文件)  state.json(游标/PDF台账/榜单检测)
+            analyst_picks.json(分析师推荐名单，姓名+机构双重匹配)
+data/       reports/YYYY-MM.jsonl(主存储，一月一文件)  state.json(游标/PDF额度/榜单检测)
 scripts/    fetch_reports.py(抓取)  build_site.py(建站)  check_xcf.py(榜单维护)  common.py
 docs/       GitHub Pages 站点（index/browse/ranking/report/about + data/ + pdfs/）
 ```
 
 数据流：东财双端点(q0/q1=list, q2/q3=jg) + 新浪(次要) → 归一化去重 → 榜单打分(tier/rank/tags)
 → PDF 精选下载(docs/pdfs/, 预算+滚动清理) → 生成站点数据分片 → Actions 提交并部署 Pages。
+
+## 分析师推荐名单（config/analyst_picks.json）
+
+独立于新财富机构榜单的"跟谁看"维度：按 姓名+机构 双重匹配研报的研究员字段（机构为空则仅按姓名），
+命中后自动打「推荐·姓名」标签并**视同最高优先级下载 PDF**，首页「推荐关注」板块展示各分析师
+近30日收录篇数与最新研报。名单来自知乎 @禾芝 的回答（著作权归原作者，见配置内 source 字段），
+可持续追加；机构变动（如刘郁 2026 年由华西→兴业）需同步更新配置中的 org。
 
 ## 每日运行
 

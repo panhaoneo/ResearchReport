@@ -42,6 +42,7 @@ function typeTag(q) { return el("span", { class: `tag type-${q}`, text: TYPE_LAB
 
 function badges(r) {
   const out = [];
+  for (const p of r.pk || []) out.push(el("span", { class: "tag badge-pick", text: "推荐·" + p.n }));
   for (const t of r.xt || []) out.push(el("span", { class: r.ti === 0 ? "tag badge-t0" : "tag badge-t1", text: t }));
   if (r.ps === "local") out.push(el("span", { class: "tag badge-pdf", text: "本地PDF" }));
   return out;
@@ -141,6 +142,15 @@ async function pageIndex() {
     ];
     for (const [num, lab] of cells) stats.appendChild(el("div", { class: "stat" }, [el("div", { class: "num", text: String(num) }), el("div", { class: "lab", text: lab })]));
   }
+  const picksHost = $("#picks");
+  if (picksHost) {
+    try {
+      const pd = await getJSON("data/picks.json");
+      renderPicks(pd, picksHost);
+    } catch (e) {
+      picksHost.appendChild(el("div", { class: "empty", text: "推荐名单数据不可用" }));
+    }
+  }
   const feat = $("#featured");
   if (feat) {
     const rows = (latest.featured || []).slice(0, 40);
@@ -168,6 +178,40 @@ async function pageIndex() {
     const kw = $("#search-input").value.trim();
     location.href = "browse.html#preset=30" + (kw ? "&kw=" + encodeURIComponent(kw) : "");
   });
+}
+
+function renderPicks(pd, host) {
+  const grid = el("div", { class: "pickgrid" });
+  for (const it of pd.items || []) {
+    const c = el("div", { class: "pickcard" });
+    const head = el("div", { class: "ph" });
+    head.appendChild(el("span", { class: "nm", text: it.name }));
+    if (it.team) head.appendChild(el("span", { class: "tag badge-pick", text: "团队" }));
+    for (const f of it.fields || []) head.appendChild(el("span", { class: "tag tag-type", text: f }));
+    if (it.org) head.appendChild(el("span", { class: "og", text: it.org }));
+    c.appendChild(head);
+    if (it.note) c.appendChild(el("div", { class: "nt", text: it.note }));
+    const st = [];
+    if (it.count30) st.push(`近30日 ${it.count30} 篇`);
+    else st.push("近30日暂无收录");
+    if (it.latest) st.push("最新 " + it.latest.slice(5));
+    c.appendChild(el("div", { class: "st", text: st.join(" · ") }));
+    const sm = el("div", { class: "sm" });
+    for (const r of it.sample || []) {
+      sm.appendChild(el("a", { href: `report.html?id=${encodeURIComponent(r.i)}&d=${r.d}`, text: "· " + r.t.slice(0, 34) + (r.t.length > 34 ? "…" : "") }));
+    }
+    sm.appendChild(el("a", { href: `browse.html#preset=d30&kw=${encodeURIComponent(it.name)}`, text: `· 查看全部（搜索 ${it.name}）→` }));
+    c.appendChild(sm);
+    grid.appendChild(c);
+  }
+  host.appendChild(grid);
+  const src = pd.source || {};
+  if (src.author) {
+    host.appendChild(el("div", { class: "st", style: "margin-top:10px" }, [
+      el("span", { text: `名单来源：${src.platform || ""} @${src.author}（著作权归原作者所有${src.answer_url ? "，" : ""}）` }),
+      src.answer_url ? el("a", { href: src.answer_url, target: "_blank", rel: "noopener", text: "原回答 →" }) : null,
+    ].filter(Boolean)));
+  }
 }
 
 /* ---------- 浏览页 ---------- */

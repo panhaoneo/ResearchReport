@@ -13,9 +13,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import (  # noqa: E402
-    CONFIG_DIR, DATA_DIR, DOCS_DIR, PDFS_DIR, build_ranking_index, dump_deterministic,
-    infer_industry, load_all_records, load_cfg, load_state, log, match_xcf, month_of,
-    normalize_org, now_bj, write_if_changed, write_json_if_changed,
+    CONFIG_DIR, DATA_DIR, DOCS_DIR, PDFS_DIR, build_picks_index, build_ranking_index,
+    dump_deterministic, infer_industry, load_all_records, load_cfg, load_state, log,
+    match_picks, match_xcf, month_of, normalize_org, now_bj, write_if_changed,
+    write_json_if_changed,
 )
 
 PAGES = ["index", "browse", "ranking", "report", "about"]
@@ -48,6 +49,9 @@ def enrich(rec, ctx):
     for lk, dst in (("pdf_direct", "u"), ("em_detail", "e"), ("sina", "n")):
         if links.get(lk):
             out[dst] = links[lk]
+    picks = match_picks(rec, ctx["picks_index"], ctx["alias"])
+    if picks:
+        out["pk"] = [{"n": p["name"], "f": "/".join(p["fields"])} for p in picks]
     return out
 
 
@@ -87,6 +91,7 @@ def build_site_data(records, cfg, state):
     ctx = {
         "alias": cfg["alias"], "industry_map": cfg["industry_map"],
         "ranking_index": build_ranking_index(cfg["ranking"], cfg["alias"]),
+        "picks_index": build_picks_index(cfg.get("picks"), cfg["alias"]),
         "org_disp": org_disp, "t0i": t0i, "t0t": t0t,
     }
     site_recs = [enrich(r, ctx) for r in records.values()]
@@ -210,6 +215,27 @@ def build_site_data(records, cfg, state):
         "industries": [{"name": ind, "rows": rows_of(rows)} for ind, rows in (x.get("industry") or {}).items()],
     })
 
+    # 分析师推荐名单（独立于机构榜单）
+    picks_cfg = cfg.get("picks") or {}
+    pick_items = []
+    for (name, org_canon_p), e in (ctx["picks_index"] or {}).items():
+        recs = [r for r in site_recs if any(pk.get("n") == name for pk in (r.get("pk") or []))]
+        recs.sort(key=lambda r: (r["d"], r["i"]), reverse=True)
+        pick_items.append({
+            "name": name, "org": e.get("org") or "", "fields": e.get("fields") or [],
+            "note": e.get("note") or "", "team": e.get("team", False),
+            "count": len(recs),
+            "count30": sum(1 for r in recs if r["d"] >= d30),
+            "latest": recs[0]["d"] if recs else "",
+            "sample": recs[:3],
+        })
+    write_json_if_changed(DOCS_DIR / "data" / "picks.json", {
+        "generated_at": now_bj().strftime("%Y-%m-%d %H:%M"),
+        "note": picks_cfg.get("note") or "",
+        "source": picks_cfg.get("source") or {},
+        "items": pick_items,
+    })
+
     # 维护清单由 known_orgs_report() 单独生成（不在本函数内写）
     return site_recs, counts
 
@@ -289,6 +315,10 @@ def render_pages(cfg, counts):
   </div>
   <div class="stats" id="stats"></div>
   <div class="section">
+    <h2>推荐关注<span class="hint">分析师名单 · 其研报自动打标并优先收录全文</span></h2>
+    <div id="picks"></div>
+  </div>
+  <div class="section">
     <h2>榜单精选<span class="hint">近 7 天 · 新财富上榜机构研报 · 按名次排序</span></h2>
     <div id="featured"></div>
   </div>
@@ -365,6 +395,7 @@ def render_pages(cfg, counts):
       <tr><th>收录内容</th><td>券商研报元数据（个股 / 行业 / 策略 / 宏观四类），每日自动抓取</td></tr>
       <tr><th>数据来源</th><td>东方财富研报中心（主）、新浪财经研报（补充）、新财富榜单（xcf.cn）</td></tr>
       <tr><th>榜单版本</th><td><span id="ab-edition">-</span>（人工转录，<a href="ranking.html">查看榜单页</a>）</td></tr>
+      <tr><th>分析师推荐</th><td>独立于机构榜单的个人关注名单（宏观/策略/金工/固收），配置于 <code>config/analyst_picks.json</code>，首页「推荐关注」展示；名单文字引用自知乎 @禾芝（<a href="https://www.zhihu.com/question/27936274/answer/2039317361019315323" target="_blank" rel="noopener">原回答</a>），著作权归原作者所有</td></tr>
       <tr><th>更新频率</th><td>每日两次（北京时间 12:30 / 20:30），由 GitHub Actions 自动执行</td></tr>
       <tr><th>当前收录</th><td><span id="ab-total">-</span> 篇 · 站点构建于 <span id="ab-generated">-</span></td></tr>
       <tr><th>本地PDF</th><td><span id="ab-pdf">-</span>（仅上榜机构研报，滚动保留，超期自动清理并保留外链）</td></tr>
