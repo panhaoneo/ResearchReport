@@ -16,7 +16,12 @@ async function getJSON(path) {
 
 function safeUrl(u) {
   if (typeof u !== "string" || !u) return "#";
-  if (/^https?:\/\//i.test(u) || u.startsWith("pdfs/") || u.startsWith("./")) return u;
+  try {
+    // 相对链接按当前页面解析（站内 report.html?id=… / browse.html#… 均可通过），
+    // 仅拦截 javascript: / data: 等危险协议
+    const url = new URL(u, document.baseURI);
+    if (url.protocol === "http:" || url.protocol === "https:") return u;
+  } catch (e) { /* 非法 URL */ }
   return "#";
 }
 
